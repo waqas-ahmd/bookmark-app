@@ -3,6 +3,7 @@ import { useQuery, useMutation } from "@apollo/client"
 import gql from "graphql-tag"
 import { Formik, Form, ErrorMessage, Field } from "formik"
 import * as Yup from "yup"
+import TextField from "@material-ui/core/TextField"
 import "./style.css"
 
 const BookMarksQuery = gql`
@@ -67,14 +68,28 @@ export default function Home() {
           <div className="inputs">
             <Form onSubmit={formik.handleSubmit}>
               <div>
-                <Field className="ip" type="text" name="title" id="title" />
+                <Field
+                  type="text"
+                  as={TextField}
+                  variant="outlined"
+                  label="Title"
+                  name="title"
+                  id="title"
+                />
                 <ErrorMessage
                   name="title"
                   render={msg => <span style={{ color: "red" }}>{msg}</span>}
                 />
               </div>
               <div>
-                <Field className="ip" type="text" name="url" id="url" />
+                <Field
+                  type="text"
+                  as={TextField}
+                  variant="outlined"
+                  label="URL"
+                  name="url"
+                  id="url"
+                />
                 <ErrorMessage
                   name="url"
                   render={msg => <span style={{ color: "red" }}>{msg}</span>}
