@@ -22,7 +22,7 @@ const resolvers = {
     bookmark: async (root, args, context) => {
       try {
         var client = new faunadb.Client({
-          secret: ${{secrets.FAUNADB_KEY}},
+          secret: "fnAD7fPVNqACA2yQI9cMFt0RsIqMi1jvO0jwl9wF",
         })
         let result = await client.query(
           q.Map(
@@ -48,7 +48,7 @@ const resolvers = {
     addBookMark: async (_, { title, url, description }) => {
       try {
         var client = new faunadb.Client({
-          secret: ${{secrets.FAUNADB_KEY}},
+          secret: "fnAD7fPVNqACA2yQI9cMFt0RsIqMi1jvO0jwl9wF",
         })
         let result = await client.query(
           q.Create(q.Collection("bookmark"), {
