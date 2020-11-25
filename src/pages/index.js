@@ -1,6 +1,8 @@
 import React from "react"
 import { useQuery, useMutation } from "@apollo/client"
 import gql from "graphql-tag"
+import { Formik, Form, ErrorMessage, Field } from "formik"
+import * as Yup from "yup"
 import "./style.css"
 
 const BookMarksQuery = gql`
@@ -9,13 +11,12 @@ const BookMarksQuery = gql`
       id
       title
       url
-      description
     }
   }
 `
 const addBookmarkMutation = gql`
-  mutation addBookMark($title: String!, $url: String!, $description: String!) {
-    addBookMark(title: $title, url: $url, description: $description) {
+  mutation addBookMark($title: String!, $url: String!) {
+    addBookMark(title: $title, url: $url) {
       title
     }
   }
@@ -24,18 +25,23 @@ const addBookmarkMutation = gql`
 export default function Home() {
   const { data } = useQuery(BookMarksQuery)
   const [addBookMark] = useMutation(addBookmarkMutation)
-  let title, urlText, description
-  const addBookmark = () => {
-    console.log("adding bookmark")
+  const initVals = {
+    title: "",
+    url: "",
+  }
+  const addBMs = values => {
     addBookMark({
       variables: {
-        title: title.value,
-        url: urlText.value,
-        description: description.value,
+        title: values.title,
+        url: values.url,
       },
       refetchQueries: [{ query: BookMarksQuery }],
     })
   }
+  const valSch = Yup.object({
+    title: Yup.string().required("Required"),
+    url: Yup.string().required("Required"),
+  })
 
   return (
     <div>
@@ -51,24 +57,36 @@ export default function Home() {
             )
           })}
       </div>
-      <div className="inputs">
-        <input
-          type="text"
-          placeholder="Title"
-          ref={node => (title = node)}
-        ></input>
-        <input
-          type="text"
-          placeholder="URL"
-          ref={node => (urlText = node)}
-        ></input>
-        <input
-          type="text"
-          placeholder="Description"
-          ref={node => (description = node)}
-        ></input>
-      </div>
-      <button onClick={addBookmark}>Add Bookmark</button>
+
+      <Formik
+        initialValues={initVals}
+        onSubmit={addBMs}
+        validationSchema={valSch}
+      >
+        {formik => (
+          <div className="inputs">
+            <Form onSubmit={formik.handleSubmit}>
+              <div>
+                <Field className="ip" type="text" name="title" id="title" />
+                <ErrorMessage
+                  name="title"
+                  render={msg => <span style={{ color: "red" }}>{msg}</span>}
+                />
+              </div>
+              <div>
+                <Field className="ip" type="text" name="url" id="url" />
+                <ErrorMessage
+                  name="url"
+                  render={msg => <span style={{ color: "red" }}>{msg}</span>}
+                />
+              </div>
+              <div>
+                <button type="submit">Add Bookmark</button>
+              </div>
+            </Form>
+          </div>
+        )}
+      </Formik>
     </div>
   )
 }

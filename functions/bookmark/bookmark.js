@@ -10,10 +10,9 @@ const typeDefs = gql`
     id: ID!
     title: String!
     url: String!
-    description: String
   }
   type Mutation {
-    addBookMark(title: String!, url: String!, description: String!): Bookmark
+    addBookMark(title: String!, url: String!): Bookmark
   }
 `
 
@@ -36,7 +35,6 @@ const resolvers = {
             id: d.ts,
             url: d.data.url,
             title: d.data.title,
-            description: d.data.description,
           }
         })
       } catch (error) {
@@ -45,14 +43,14 @@ const resolvers = {
     },
   },
   Mutation: {
-    addBookMark: async (_, { title, url, description }) => {
+    addBookMark: async (_, { title, url }) => {
       try {
         var client = new faunadb.Client({
           secret: process.env.GATSBY_FAUNADB_KEY,
         })
         let result = await client.query(
           q.Create(q.Collection("bookmark"), {
-            data: { title, url, description },
+            data: { title, url },
           })
         )
         console.log("Bookmark Added")

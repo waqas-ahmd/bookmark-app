@@ -61,7 +61,7 @@
   flex-direction: column;
 }
 
-.inputs input {
+.inputs .ip {
   height: 30px;
   background-color: rgb(192, 192, 192);
   border: none;
@@ -70,11 +70,11 @@
   margin-bottom: 1px;
 }
 
-.inputs input::placeholder {
+.inputs .ip::placeholder {
   color: aliceblue;
 }
 
-.inputs input:focus {
+.inputs .ip:focus {
   background: rgb(102, 102, 102);
   outline: none;
 }
